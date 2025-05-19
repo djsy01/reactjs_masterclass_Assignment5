@@ -142,7 +142,8 @@ interface PriceData {
 
 function Coin() {
   const { coinId } = useParams<keyof RouteParams>() as RouteParams;
-  const { state } = useLocation() as { state: RouteState };
+  const location = useLocation();
+  const state = location.state as RouteState | undefined;
 
   const { isLoading: infoLoading, data: infoData } = useQuery<InfoData>({
     queryKey: ["info", coinId],
@@ -156,8 +157,8 @@ function Coin() {
 
   const loading = infoLoading || tickersLoading;
 
-  const priceMatch = useMatch(`/:coinId/price`);
-  const chartMatch = useMatch(`/:coinId/chart`);
+  const priceMatch = useMatch(`/${coinId}/price`);
+  const chartMatch = useMatch(`/${coinId}/chart`);
 
   return (
     <Container>
@@ -196,16 +197,17 @@ function Coin() {
 
           <Tabs>
             <Tab isActive={chartMatch !== null}>
-              <Link to={`/${coinId}/chart`}>Chart</Link>
+              <Link to={`chart`}>Chart</Link>
             </Tab>
             <Tab isActive={priceMatch !== null}>
-              <Link to={`/${coinId}/price`}>Price</Link>
+              <Link to={`price`}>Price</Link>
             </Tab>
           </Tabs>
 
+          {/* 하위 라우트 렌더링 */}
           <Routes>
-            <Route path={`/:coinId/price`} element={<Price />} />
-            <Route path={`/:coinId/chart`} element={<Chart />} />
+            <Route path="price" element={<Price />} />
+            <Route path="chart" element={<Chart />} />
           </Routes>
         </>
       )}
