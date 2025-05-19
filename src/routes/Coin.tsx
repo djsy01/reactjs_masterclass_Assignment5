@@ -207,7 +207,7 @@ function Coin() {
           {/* 하위 라우트 렌더링 */}
           <Routes>
             <Route path="price" element={<Price />} />
-            <Route path="chart" element={<Chart />} />
+            <Route path="chart" element={<Chart coinId={coinId} />} />
           </Routes>
         </>
       )}
