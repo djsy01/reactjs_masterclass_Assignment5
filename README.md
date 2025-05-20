@@ -5,8 +5,7 @@ ReactJS 마스터클래스 코드챌린지!!
 
 ## 사용 기술
 - React
-- Styled-components
-- React Router (페이지 전환)
+- GlobalStyle
 
 ## 주요 기능
 - **To Do List**: To Do List에, Recoil을 사용하여 아래의 두 가지 기능을 추가해주세요.
@@ -17,4 +16,4 @@ ReactJS 마스터클래스 코드챌린지!!
 - 
 
 ## 어려웠던 점 및 해결 방법
-- **테마버튼**이 왼쪽 상단에 들어가던걸 우측 상단으로 바꾸는 과정에서 styled를 한번 더 import하기
+- 
