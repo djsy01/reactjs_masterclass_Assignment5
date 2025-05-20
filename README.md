@@ -1,4 +1,4 @@
-# ReactJS_마스터클래스 Assignment4 프로젝트
+# ReactJS_마스터클래스 Assignment5 프로젝트
 
 ## 개요
 ReactJS 마스터클래스 코드챌린지 과제로, To Do List에 커스텀 카테고리 기능을 추가하고, 데이터가 새로고침 후에도 유지되도록 구현한 프로젝트입니다.

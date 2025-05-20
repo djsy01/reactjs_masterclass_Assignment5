@@ -2,6 +2,7 @@
   "name": "my-app",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://djsy01.github.io/reactjs_masterclass_Assignment4",
   "dependencies": {
     "@tanstack/react-query": "^5.76.1",
     "@testing-library/dom": "^10.4.0",
@@ -28,7 +29,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -53,6 +56,7 @@
     "@types/react": "^18.3.21",
     "@types/react-dom": "^18.3.7",
     "@types/react-helmet": "^6.1.11",
-    "@types/styled-components": "^5.1.34"
+    "@types/styled-components": "^5.1.34",
+    "gh-pages": "^6.3.0"
   }
 }
