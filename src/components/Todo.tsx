@@ -1,4 +1,40 @@
 import React from "react";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { IToDo, categoryListState, toDoState } from "../atoms";
+
+function ToDo({ text, category, id }: IToDo) {
+  const categories = useRecoilValue(categoryListState);
+  const setToDos = useSetRecoilState(toDoState);
+
+  const onClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const newCategory = e.currentTarget.name;
+    setToDos((oldToDos) =>
+      oldToDos.map((toDo) =>
+        toDo.id === id ? { ...toDo, category: newCategory } : toDo
+      )
+    );
+  };
+
+  return (
+    <li>
+      <span>{text}</span>
+      <div>
+        {categories
+          .filter((cat) => cat !== category)
+          .map((cat) => (
+            <button key={cat} name={cat} onClick={onClick}>
+              {cat}
+            </button>
+          ))}
+      </div>
+    </li>
+  );
+}
+
+export default ToDo;
+
+
+/*import React from "react";
 import { useSetRecoilState } from "recoil";
 import { Categories, IToDo, toDoState } from "../atoms";
 
@@ -42,6 +78,7 @@ function ToDo({ text, category, id }: IToDo) {
 }
 
 export default ToDo;
+*/
 
 /*
 import React from "react";

@@ -1,32 +1,50 @@
 import { atom, selector } from "recoil";
 
-export enum Categories {
-  "TO_DO" = "TO_DO",
-  "DOING" = "DOING",
-  "DONE" = "DONE",
-}
+const localStorageEffect =
+  (key: string) =>
+  ({ setSelf, onSet }: { setSelf: (val: any) => void; onSet: (callback: (newValue: any, oldValue: any, isReset: boolean) => void) => void }) => {
+    const savedValue = localStorage.getItem(key);
+    if (savedValue != null) {
+      setSelf(JSON.parse(savedValue));
+    }
+    onSet((newValue: any, _oldValue: any, isReset: boolean) => {
+      if (isReset) {
+        localStorage.removeItem(key);
+      } else {
+        localStorage.setItem(key, JSON.stringify(newValue));
+      }
+    });
+  };
+
+export const categoryListState = atom<string[]>({
+  key: "categoryListState",
+  default: ["TO_DO", "DOING", "DONE"],
+  effects_UNSTABLE: [localStorageEffect("categoryListState")],
+});
+
+export const selectedCategoryState = atom<string>({
+  key: "selectedCategoryState",
+  default: "TO_DO",
+  effects_UNSTABLE: [localStorageEffect("selectedCategoryState")],
+});
 
 export interface IToDo {
   text: string;
   id: number;
-  category: Categories;
+  category: string; // 단일 카테고리명 (string)
 }
 
-export const categoryState = atom<Categories>({
-  key: "category",
-  default: Categories.TO_DO,
-});
-
 export const toDoState = atom<IToDo[]>({
-  key: "toDo",
+  key: "toDoState",
   default: [],
+  effects_UNSTABLE: [localStorageEffect("toDoState")],
 });
 
-export const toDoSelector = selector({
+export const toDoSelector = selector<IToDo[]>({
   key: "toDoSelector",
   get: ({ get }) => {
     const toDos = get(toDoState);
-    const category = get(categoryState);
+    const category = get(selectedCategoryState);
     return toDos.filter((toDo) => toDo.category === category);
   },
 });
