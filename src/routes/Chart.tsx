@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchCoinHistory } from "../api";
 import ApexChart from "react-apexcharts";
 import { useParams } from "react-router-dom";
+import { useTheme } from "styled-components";
 
 interface IHistorical {
   time_open: string;
@@ -15,6 +16,7 @@ interface IHistorical {
 }
 
 function Chart() {
+  const theme = useTheme();
   const { coinId } = useParams<{ coinId: string }>();
 
   const { isLoading, data } = useQuery<IHistorical[]>({
@@ -56,20 +58,29 @@ function Chart() {
           toolbar: {
             show: false,
           },
+          foreColor: theme.textColor,
         },
         xaxis: {
           type: "datetime",
           labels: {
             show: true,
+            style: {
+              colors: theme.textColor,
+            },
           },
         },
         yaxis: {
           tooltip: {
             enabled: true,
           },
+          labels: {
+            style: {
+              colors: theme.textColor,
+            },
+          },
         },
         theme: {
-          mode: "dark",
+          mode: theme.bgColor === "#2f3640" ? "dark" : "light",
         },
       }}
     />
