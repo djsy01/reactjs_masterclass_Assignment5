@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "https://djsy01.github.io/reactjs_masterclass_Assignment5",
   "dependencies": {
+    "@hello-pangea/dnd": "^18.0.1",
     "@tanstack/react-query": "^5.76.1",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
@@ -14,7 +15,6 @@
     "apexcharts": "^4.7.0",
     "react": "^18.3.1",
     "react-apexcharts": "^1.7.0",
-    "react-beautiful-dnd": "^13.1.1",
     "react-dom": "^18.3.1",
     "react-helmet": "^6.1.0",
     "react-hook-form": "^7.56.4",
