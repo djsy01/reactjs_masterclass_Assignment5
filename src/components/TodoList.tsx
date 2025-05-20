@@ -1,3 +1,70 @@
+import { useRecoilValue } from "recoil";
+import { toDoSelector, toDoState } from "../atoms";
+import CreateToDo from "./CreateTodo";
+import ToDo from "./Todo";
+
+function ToDoList() {
+  const toDos = useRecoilValue(toDoState);
+  console.log(toDos);
+  const [toDo, doing, done] = useRecoilValue(toDoSelector);
+  return (
+    <div>
+      <h1>To Dos</h1>
+      <hr />
+      <CreateToDo />
+      <h2>To Do</h2>
+      <ul>
+        {toDo.map((toDo) => (
+          <ToDo key={toDo.id} {...toDo} />
+        ))}
+      </ul>
+      <hr />
+      <h2>Doing</h2>
+      <ul>
+        {doing.map((toDo) => (
+          <ToDo key={toDo.id} {...toDo} />
+        ))}
+      </ul>
+      <hr />
+      <h2>Done</h2>
+      <ul>
+        {done.map((toDo) => (
+          <ToDo key={toDo.id} {...toDo} />
+        ))}
+      </ul>
+      <hr />
+    </div>
+  );
+}
+
+export default ToDoList;
+
+/*
+import { useRecoilValue } from "recoil";
+import { toDoState } from "../atoms";
+import CreateToDo from "./CreateTodo";
+import ToDo from "./Todo";
+
+function ToDoList() {
+    const toDos = useRecoilValue(toDoState);
+    console.log(toDos);
+    return (
+        <div>
+            <h1>To Dos</h1>
+            <hr />
+            <CreateToDo />
+            <ul>
+                {toDos.map((toDo) => (
+                    <ToDo key={toDo.id} {...toDo} />
+                ))}
+            </ul>
+        </div>
+    );
+}
+
+export default ToDoList;
+*/
+
 /*
 import { useForm } from "react-hook-form";
 import { atom, useRecoilState } from "recoil";
@@ -51,27 +118,3 @@ function ToDoList() {
 
 export default ToDoList;
 */
-
-import { useRecoilValue } from "recoil";
-import { toDoState } from "../atoms";
-import CreateToDo from "./CreateTodo";
-import ToDo from "./Todo";
-
-function ToDoList() {
-    const toDos = useRecoilValue(toDoState);
-    console.log(toDos);
-    return (
-        <div>
-            <h1>To Dos</h1>
-            <hr />
-            <CreateToDo />
-            <ul>
-                {toDos.map((toDo) => (
-                    <ToDo key={toDo.id} {...toDo} />
-                ))}
-            </ul>
-        </div>
-    );
-}
-
-export default ToDoList;
