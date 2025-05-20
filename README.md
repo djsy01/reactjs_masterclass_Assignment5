@@ -1,4 +1,4 @@
-# ReactJS_마스터클래스 Assignment3 프로젝트
+# ReactJS_마스터클래스 Assignment4 프로젝트
 
 ## 개요
 ReactJS 마스터클래스 코드챌린지!!
