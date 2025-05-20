@@ -1,7 +1,7 @@
-import React from "react";
 import { useForm } from "react-hook-form";
 
-/* function ToDoList() {
+/* 
+function ToDoList() {
   const [toDo, setToDo] = useState("");
   const [toDoError, setToDoError] = useState("");
   const onChange = (event: React.FormEvent<HTMLInputElement>) => {
@@ -27,8 +27,10 @@ import { useForm } from "react-hook-form";
       </form>
     </div>
   );
-} */
+} 
+*/
 
+/*
 interface IForm {
   email: string;
   firstName: string;
@@ -122,6 +124,35 @@ function ToDoList() {
       </form>
     </div>
   );
+}
+
+export default ToDoList;
+*/
+
+interface IForm {
+  toDo: string;
+}
+
+function ToDoList() {
+    const { register, handleSubmit, setValue } = useForm<IForm>();
+    const handleValid = (data: IForm) => {
+        console.log("add to do", data.toDo);
+        setValue("toDo", "");
+    };
+
+    return (
+        <div>
+            <form onSubmit={handleSubmit(handleValid)}>
+                <input
+                    {...register("toDo", {
+                        required: "Please write a To Do",
+                    })}
+                    placeholder="Write a to do"
+                />
+                <button>Add</button>
+            </form>
+        </div>
+    );
 }
 
 export default ToDoList;
