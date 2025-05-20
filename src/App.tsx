@@ -1,14 +1,12 @@
-import React from "react";
-import { useRecoilState } from "recoil";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
-import { toDoState } from "./atoms"; // atom 타입: { [key: string]: string[] }
+import { toDoState } from "./atoms";
 import Board from "./Components/Board";
 
 const Wrapper = styled.div`
   display: flex;
-  max-width: 680px;
-  width: 100%;
+  width: 100vw;
   margin: 0 auto;
   justify-content: center;
   align-items: center;
@@ -16,10 +14,11 @@ const Wrapper = styled.div`
 `;
 
 const Boards = styled.div`
-  display: grid;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
   width: 100%;
   gap: 10px;
-  grid-template-columns: repeat(3, 1fr);
 `;
 
 function App() {
@@ -29,24 +28,24 @@ function App() {
     const { destination, source } = info;
     if (!destination) return;
 
-    setToDos((allBoards) => {
-      // 출발 보드 배열 복사
-      const sourceBoard = [...allBoards[source.droppableId]];
-      // 도착 보드 배열 복사
-      const destinationBoard = [...allBoards[destination.droppableId]];
-      // 이동할 아이템
-      const taskObj = sourceBoard[source.index];
-
-      if (source.droppableId === destination.droppableId) {
-        // 같은 보드 내 이동
-        sourceBoard.splice(source.index, 1);
-        sourceBoard.splice(destination.index, 0, taskObj);
+    if (destination.droppableId === source.droppableId) {
+      // 같은 보드 내 이동
+      setToDos((allBoards) => {
+        const boardCopy = [...allBoards[source.droppableId]];
+        const taskObj = boardCopy[source.index];
+        boardCopy.splice(source.index, 1);
+        boardCopy.splice(destination.index, 0, taskObj);
         return {
           ...allBoards,
-          [source.droppableId]: sourceBoard,
+          [source.droppableId]: boardCopy,
         };
-      } else {
-        // 다른 보드로 이동
+      });
+    } else {
+      // 다른 보드로 이동
+      setToDos((allBoards) => {
+        const sourceBoard = [...allBoards[source.droppableId]];
+        const destinationBoard = [...allBoards[destination.droppableId]];
+        const taskObj = sourceBoard[source.index];
         sourceBoard.splice(source.index, 1);
         destinationBoard.splice(destination.index, 0, taskObj);
         return {
@@ -54,8 +53,8 @@ function App() {
           [source.droppableId]: sourceBoard,
           [destination.droppableId]: destinationBoard,
         };
-      }
-    });
+      });
+    }
   };
 
   return (

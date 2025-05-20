@@ -1,13 +1,13 @@
-import React, { useRef } from "react";
 import { useForm } from "react-hook-form";
-import { useRecoilState } from "recoil";
 import { Droppable } from "@hello-pangea/dnd";
 import styled from "styled-components";
-import DraggableCard from "./DragabbleCard";
+import DraggableCard from "./DragabbleCard"; // 컴포넌트명과 파일명 맞게 수정
 import { ITodo, toDoState } from "../atoms";
+import { useSetRecoilState } from "recoil";
 
 const Wrapper = styled.div`
   width: 300px;
+  padding-top: 10px;
   background-color: ${(props) => props.theme.boardColor};
   border-radius: 5px;
   min-height: 300px;
@@ -44,9 +44,6 @@ const Form = styled.form`
   width: 100%;
   input {
     width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    box-sizing: border-box;
   }
 `;
 
@@ -60,25 +57,21 @@ interface IForm {
 }
 
 function Board({ toDos, boardId }: IBoardProps) {
-  const inputRef = useRef<HTMLInputElement>(null);
+  const setToDos = useSetRecoilState(toDoState);
   const { register, setValue, handleSubmit } = useForm<IForm>();
-  const [allToDos, setAllToDos] = useRecoilState(toDoState);
 
   const onValid = ({ toDo }: IForm) => {
     const newToDo: ITodo = {
-      id: Date.now().toString(),
+      id: Date.now().toString(),  // string 타입 맞춤
       text: toDo,
     };
-
-    setAllToDos((prev) => {
+    setToDos((allBoards) => {
       return {
-        ...prev,
-        [boardId]: [newToDo, ...prev[boardId]],
+        ...allBoards,
+        [boardId]: [newToDo, ...allBoards[boardId]],
       };
     });
-
     setValue("toDo", "");
-    inputRef.current?.blur();
   };
 
   return (
@@ -89,7 +82,6 @@ function Board({ toDos, boardId }: IBoardProps) {
           {...register("toDo", { required: true })}
           type="text"
           placeholder={`Add task on ${boardId}`}
-          ref={inputRef}
         />
       </Form>
       <Droppable droppableId={boardId}>
