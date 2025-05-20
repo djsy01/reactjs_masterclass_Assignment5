@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchCoinHistory } from "../api";
 import ApexChart from "react-apexcharts";
+import { useParams } from "react-router-dom";
 
 interface IHistorical {
   time_open: string;
@@ -13,14 +14,12 @@ interface IHistorical {
   market_cap: number;
 }
 
-interface ChartProps {
-  coinId: string;
-}
+function Chart() {
+  const { coinId } = useParams<{ coinId: string }>();
 
-function Chart({ coinId }: ChartProps) {
   const { isLoading, data } = useQuery<IHistorical[]>({
     queryKey: ["ohlcv", coinId],
-    queryFn: () => fetchCoinHistory(coinId),
+    queryFn: () => fetchCoinHistory(coinId!),
     refetchInterval: 10000,
   });
 
@@ -30,49 +29,43 @@ function Chart({ coinId }: ChartProps) {
         "Loading chart..."
       ) : (
         <ApexChart
-          type="line"
+          type="candlestick"
           series={[
             {
               name: "Price",
-              data: data?.map((price) => price.close) ?? [],
+              data: data?.map((price: IHistorical) => ({
+                x: new Date(price.time_close).getTime(),
+                y: [
+                  price.open.toFixed(2),
+                  price.high.toFixed(2),
+                  price.low.toFixed(2),
+                  price.close.toFixed(2),
+                ],
+              })) ?? [],
             },
           ]}
           options={{
-            theme: {
-              mode: "dark",
-            },
             chart: {
-              height: 300,
-              width: 500,
+              type: "candlestick",
+              height: 350,
+              background: "transparent",
               toolbar: {
                 show: false,
               },
-              background: "transparent",
-            },
-            grid: { show: false },
-            stroke: {
-              curve: "smooth",
-              width: 4,
-            },
-            yaxis: {
-              show: false,
             },
             xaxis: {
-              axisBorder: { show: false },
-              axisTicks: { show: false },
-              labels: { show: false },
               type: "datetime",
-              categories: data?.map((price) => price.time_close),
-            },
-            fill: {
-              type: "gradient",
-              gradient: { gradientToColors: ["#0be881"], stops: [0, 100] },
-            },
-            colors: ["#0fbcf9"],
-            tooltip: {
-              y: {
-                formatter: (value) => `$${value.toFixed(2)}`,
+              labels: {
+                show: true,
               },
+            },
+            yaxis: {
+              tooltip: {
+                enabled: true,
+              },
+            },
+            theme: {
+              mode: "dark",
             },
           }}
         />

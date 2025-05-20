@@ -13,6 +13,18 @@ import { fetchCoinInfo, fetchCoinTickers } from "../api";
 import Chart from "./Chart";
 import Price from "./Price";
 
+const HomeButton = styled.button`
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  padding: 5px 10px;
+  background-color: ${(props) => props.theme.accentColor};
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+`;
+
 const Title = styled.h1`
   font-size: 48px;
   color: ${(props) => props.theme.accentColor};
@@ -164,6 +176,11 @@ function Coin() {
 
   return (
     <Container>
+      <HomeButton>
+        <Link to="/" style={{ color: "inherit", textDecoration: "none" }}>
+          Home
+        </Link>
+      </HomeButton>
       <Helmet>
         <title>
           {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
@@ -214,7 +231,7 @@ function Coin() {
           {/* 하위 라우트 렌더링 */}
           <Routes>
             <Route path="price" element={<Price />} />
-            <Route path="chart" element={<Chart coinId={coinId} />} />
+            <Route path="chart" element={<Chart />} />
           </Routes>
         </>
       )}
