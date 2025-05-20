@@ -7,8 +7,7 @@ import Board from "./Components/Board";
 
 const Wrapper = styled.div`
   display: flex;
-  max-width: 680px;
-  width: 100%;
+  width: 100vw;
   margin: 0 auto;
   justify-content: center;
   align-items: center;
@@ -16,47 +15,27 @@ const Wrapper = styled.div`
 `;
 
 const Boards = styled.div`
-  display: grid;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
   width: 100%;
   gap: 10px;
-  grid-template-columns: repeat(3, 1fr);
 `;
 
 function App() {
   const [toDos, setToDos] = useRecoilState(toDoState);
-
-  const onDragEnd = ({ destination, source }: DropResult) => {
-    if (!destination) return;
-
-    // 같은 보드 내에서 이동
-    if (source.droppableId === destination.droppableId) {
-      setToDos((oldToDos) => {
-        const boardCopy = [...oldToDos[source.droppableId]];
-        const taskObj = boardCopy[source.index];
-        boardCopy.splice(source.index, 1);
-        boardCopy.splice(destination.index, 0, taskObj);
-
-        return {
-          ...oldToDos,
-          [source.droppableId]: boardCopy,
-        };
-      });
-    }
-
-    // 다른 보드 간 이동
-    else {
+  const onDragEnd = (info: DropResult) => {
+    console.log(info);
+    const { destination, draggableId, source } = info;
+    if (destination?.droppableId === source.droppableId) {
+      // same board movement.
       setToDos((allBoards) => {
-        const sourceBoard = [...allBoards[source.droppableId]];
-        const taskObj = sourceBoard[source.index];
-        const destinationBoard = [...allBoards[destination.droppableId]];
-
-        sourceBoard.splice(source.index, 1);
-        destinationBoard.splice(destination.index, 0, taskObj);
-
+        const boardCopy = [...allBoards[source.droppableId]];
+        boardCopy.splice(source.index, 1);
+        boardCopy.splice(destination?.index, 0, draggableId);
         return {
           ...allBoards,
-          [source.droppableId]: sourceBoard,
-          [destination.droppableId]: destinationBoard,
+          [source.droppableId]: boardCopy,
         };
       });
     }
