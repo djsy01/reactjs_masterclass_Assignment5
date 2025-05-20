@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
+import { useRecoilState } from "recoil";
 import {
   DragDropContext,
   Droppable,
   Draggable,
   DropResult,
-  DroppableProvided,
-  DraggableProvided,
 } from "@hello-pangea/dnd";
 import styled from "styled-components";
+import { toDoState } from "./atoms"; // 이미 정의된 atom 임포트
 
 const Wrapper = styled.div`
   display: flex;
@@ -42,16 +42,24 @@ const Card = styled.div`
 `;
 
 function App() {
-  const [items, setItems] = useState(["a", "b", "c", "d", "e", "f"]);
+  const [toDos, setToDos] = useRecoilState(toDoState);
 
   const onDragEnd = (result: DropResult) => {
-    if (!result.destination) return;
+    const { destination, source } = result;
+    if (!destination) return;
 
-    const updated = Array.from(items);
-    const [moved] = updated.splice(result.source.index, 1);
-    updated.splice(result.destination.index, 0, moved);
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    ) {
+      return; // 같은 위치면 변경하지 않음
+    }
 
-    setItems(updated);
+    const newToDos = Array.from(toDos);
+    const [moved] = newToDos.splice(source.index, 1);
+    newToDos.splice(destination.index, 0, moved);
+
+    setToDos(newToDos);
   };
 
   return (
@@ -59,11 +67,11 @@ function App() {
       <Wrapper>
         <Boards>
           <Droppable droppableId="one">
-            {(provided: DroppableProvided) => (
+            {(provided) => (
               <Board ref={provided.innerRef} {...provided.droppableProps}>
-                {items.map((toDo, index) => (
-                  <Draggable draggableId={toDo} index={index} key={toDo}>
-                    {(provided: DraggableProvided) => (
+                {toDos.map((toDo, index) => (
+                  <Draggable key={toDo} draggableId={toDo} index={index}>
+                    {(provided) => (
                       <Card
                         ref={provided.innerRef}
                         {...provided.dragHandleProps}
