@@ -44,16 +44,23 @@ const Card = styled.div`
 function App() {
   const [toDos, setToDos] = useRecoilState(toDoState);
 
-  const onDragEnd = (result: DropResult) => {
-    const { destination, source } = result;
+  const onDragEnd = ({ draggableId, destination, source }: DropResult) => {
     if (!destination) return;
-
-    if (
-      destination.droppableId === source.droppableId &&
-      destination.index === source.index
-    ) {
-      return; // 같은 위치면 변경하지 않음
-    }
+    setToDos((oldToDos) => {
+      const toDosCopy = [...oldToDos];
+      // 1) Delete item on source.index
+      console.log("Delete item on", source.index);
+      console.log(toDosCopy);
+      toDosCopy.splice(source.index, 1);
+      console.log("Deleted item");
+      console.log(toDosCopy);
+      // 2) Put back the item on the destination.index
+      console.log("Put back", draggableId, "on ", destination.index);
+      toDosCopy.splice(destination?.index, 0, draggableId);
+      console.log(toDosCopy);
+      return toDosCopy;
+    });
+  
 
     const newToDos = Array.from(toDos);
     const [moved] = newToDos.splice(source.index, 1);
