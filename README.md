@@ -9,6 +9,7 @@ ReactJS 마스터클래스 코드챌린지 과제로, To Do List에 커스텀 �
 - Recoil (전역 상태 관리)
 - React Hook Form (폼 관리)
 - react-beautiful-dnd
+- Framer-motion(애니메이션)
 
 ## 주요 기능
 
